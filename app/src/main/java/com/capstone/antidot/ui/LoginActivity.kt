@@ -13,7 +13,6 @@ import androidx.core.view.WindowInsetsCompat
 import com.capstone.antidot.R
 import com.capstone.antidot.api.RetrofitClient
 import com.capstone.antidot.api.models.UserRequest
-import com.capstone.antidot.utils.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
