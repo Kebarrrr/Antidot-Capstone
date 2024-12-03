@@ -28,9 +28,11 @@ class SessionManager(context: Context) {
         prefs.edit().apply {
             putBoolean(KEY_IS_LOGGED_IN, true)
             putString(KEY_TOKEN, token)
+            putLong(KEY_SESSION_TIMESTAMP, System.currentTimeMillis())
             apply()
         }
     }
+
 
     fun isSessionExpired(timeoutMillis: Long): Boolean {
         val timestamp = prefs.getLong(KEY_SESSION_TIMESTAMP, 0L)

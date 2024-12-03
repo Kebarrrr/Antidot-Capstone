@@ -6,17 +6,16 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.capstone.antidot.R
 import com.capstone.antidot.api.RetrofitClient
 import com.capstone.antidot.api.models.UserRequest
+import com.capstone.antidot.utils.SessionManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.IOException
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +40,7 @@ class LoginActivity : AppCompatActivity() {
                 try {
                     val response = RetrofitClient.instance.login(UserRequest(email, password))
                     withContext(Dispatchers.Main) {
-                        if (response.success) {
+                        if (response.status == "success") {
                             val token = response.token
                             if (token.isNullOrEmpty()) {
                                 Toast.makeText(this@LoginActivity, "Token tidak valid", Toast.LENGTH_SHORT).show()
@@ -55,9 +54,13 @@ class LoginActivity : AppCompatActivity() {
                             Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_SHORT).show()
                         }
                     }
+                } catch (e: IOException) {
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(this@LoginActivity, "Tidak dapat terhubung ke server. Periksa koneksi Anda.", Toast.LENGTH_SHORT).show()
+                    }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        Toast.makeText(this@LoginActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, "Error tidak diketahui: ${e.message}", Toast.LENGTH_SHORT).show()
                         e.printStackTrace()
                     }
                 }

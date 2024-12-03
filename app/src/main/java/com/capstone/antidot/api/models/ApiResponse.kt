@@ -1,7 +1,8 @@
 package com.capstone.antidot.api.models
 
 data class ApiResponse(
-    val success: Boolean,
+    val status: String,
     val message: String,
-    val token: String? = null
+    val token: String?,
+    val userData: UserData?
 )
