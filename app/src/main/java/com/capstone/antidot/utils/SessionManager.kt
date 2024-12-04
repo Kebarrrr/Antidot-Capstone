@@ -2,6 +2,7 @@ package com.capstone.antidot.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 
@@ -28,9 +29,12 @@ class SessionManager(context: Context) {
         prefs.edit().apply {
             putBoolean(KEY_IS_LOGGED_IN, true)
             putString(KEY_TOKEN, token)
+            putLong(KEY_SESSION_TIMESTAMP, System.currentTimeMillis())
             apply()
         }
+        Log.d("SessionManager", "Token saved: $token") // Debug log
     }
+
 
     fun isSessionExpired(timeoutMillis: Long): Boolean {
         val timestamp = prefs.getLong(KEY_SESSION_TIMESTAMP, 0L)
@@ -47,5 +51,9 @@ class SessionManager(context: Context) {
 
     fun isLoggedIn(): Boolean = prefs.getBoolean(KEY_IS_LOGGED_IN, false)
 
-    fun getToken(): String? = prefs.getString(KEY_TOKEN, null)
+    fun getToken(): String? {
+        val token = prefs.getString(KEY_TOKEN, null)
+        Log.d("SessionManager", "Token retrieved: $token") // Debug log
+        return token
+    }
 }

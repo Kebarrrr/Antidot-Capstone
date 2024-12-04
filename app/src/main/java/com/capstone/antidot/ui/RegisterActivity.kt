@@ -1,15 +1,13 @@
 package com.capstone.antidot.ui
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.capstone.antidot.R
 import com.capstone.antidot.api.RetrofitClient
 import com.capstone.antidot.api.models.RegisterRequest
@@ -17,6 +15,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,33 +31,63 @@ class RegisterActivity : AppCompatActivity() {
         val registerButton: Button = findViewById(R.id.btn_register)
         val goToLoginText: TextView = findViewById(R.id.tv_go_to_login)
 
-        // Register button click listener
-        registerButton.setOnClickListener {
-            handleRegister(
-                name = nameField.text.toString(),
-                date = dateField.text.toString(),
-                email = emailField.text.toString(),
-                password = passwordField.text.toString(),
-                confirmPassword = confirmPasswordField.text.toString()
+        // Set up Date Picker Dialog
+        dateField.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val datePicker = DatePickerDialog(
+                this,
+                { _, year, month, dayOfMonth ->
+                    dateField.setText(String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth))
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
             )
+            datePicker.show()
         }
 
-        // Navigation to login page
+        // Handle Registration
+        registerButton.setOnClickListener {
+            val birthDate = convertToDate(dateField.text.toString())
+            if (birthDate != null) {
+                handleRegister(
+                    fullName = nameField.text.toString(),
+                    birthDate = birthDate,
+                    email = emailField.text.toString(),
+                    password = passwordField.text.toString(),
+                    confPassword = confirmPasswordField.text.toString()
+                )
+            } else {
+                showToast("Format tanggal harus YYYY-MM-DD")
+            }
+        }
+
+        // Navigate to Login
         goToLoginText.setOnClickListener {
             navigateToLogin()
         }
     }
 
-    private fun handleRegister(name: String, date: String, email: String, password: String, confirmPassword: String) {
-        if (!validateInput(name, date, email, password, confirmPassword)) return
+    private fun handleRegister(fullName: String, birthDate: Date, email: String, password: String, confPassword: String) {
+        if (!validateInput(fullName, birthDate, email, password, confPassword)) return
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = RetrofitClient.instance.register(
-                    RegisterRequest(name, date, email, password, confirmPassword)
+                    RegisterRequest(fullName, birthDate, email, password, confPassword)
                 )
                 withContext(Dispatchers.Main) {
-                    handleResponse(response.success, response.message)
+                    if (response.status == "success") {
+                        showToast("Registrasi berhasil. Silakan login")
+                        navigateToLogin()
+                    } else {
+                        showToast(response.message)
+                    }
+                }
+            } catch (e: retrofit2.HttpException) {
+                withContext(Dispatchers.Main) {
+                    val errorBody = e.response()?.errorBody()?.string()
+                    showToast("Error: ${errorBody ?: "Terjadi kesalahan"}")
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
@@ -67,31 +97,36 @@ class RegisterActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateInput(name: String, date: String, email: String, password: String, confirmPassword: String): Boolean {
-        if (name.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+    private fun validateInput(fullName: String, birthDate: Date, email: String, password: String, confPassword: String): Boolean {
+        if (fullName.isBlank() || email.isBlank() || password.isBlank() || confPassword.isBlank()) {
             showToast("Semua field harus diisi")
             return false
         }
 
-        if (password != confirmPassword) {
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            showToast("Format email tidak valid")
+            return false
+        }
+
+        if (password != confPassword) {
             showToast("Password dan Konfirmasi Password harus sama")
             return false
         }
 
-        if (!date.matches(Regex("\\d{4}-\\d{2}-\\d{2}"))) {
-            showToast("Format tanggal harus YYYY-MM-DD")
+        if (password.length < 8) {
+            showToast("Password harus memiliki minimal 8 karakter")
             return false
         }
 
         return true
     }
 
-    private fun handleResponse(success: Boolean, message: String) {
-        if (success) {
-            showToast("Registrasi berhasil. Silakan login")
-            finish() // Kembali ke aktivitas sebelumnya
-        } else {
-            showToast(message)
+    private fun convertToDate(dateString: String): Date? {
+        return try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            sdf.parse(dateString)
+        } catch (e: Exception) {
+            null
         }
     }
 
@@ -103,5 +138,9 @@ class RegisterActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onBackPressed() {
+        navigateToLogin()
     }
 }

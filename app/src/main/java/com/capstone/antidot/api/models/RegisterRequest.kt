@@ -1,9 +1,11 @@
 package com.capstone.antidot.api.models
 
+import java.util.Date
+
 data class RegisterRequest(
-    val name: String,
-    val date: String,
+    val fullName: String,
+    val birthDate: Date,
     val email: String,
     val password: String,
-    val confirmPassword: String
+    val confPassword: String
 )
