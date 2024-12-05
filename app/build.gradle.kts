@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -60,4 +61,9 @@ dependencies {
     implementation(libs.circleimageview)
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
+    implementation (libs.material)
+    implementation ("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.11.0")
+    implementation ("com.github.bumptech.glide:glide:4.15.1") // Pastikan menggunakan versi terbaru
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1") // Menambahkan compiler untuk Glide
 }

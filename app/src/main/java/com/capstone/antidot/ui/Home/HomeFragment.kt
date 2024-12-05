@@ -5,8 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.bumptech.glide.Glide
+import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import com.capstone.antidot.R
 import com.capstone.antidot.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -14,30 +15,45 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var homeViewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-
-        // Observe the profile data
-        homeViewModel.userProfile.observe(viewLifecycleOwner) { user ->
-            // Update UI with user profile data
-            binding.greetingName.text = "Hi, ${user.fullName}"
-            Glide.with(this)
-                .load(user.profilePicture)
-                .placeholder(android.R.drawable.ic_menu_camera) // Default placeholder
-                .into(binding.profileImage)
-        }
-
-        // Call ViewModel to load the user profile
-        homeViewModel.loadUserProfile()
-
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Observe ViewModel data
+        homeViewModel.greetingText.observe(viewLifecycleOwner) { greeting ->
+            binding.greetingName.text = greeting
+        }
+
+        homeViewModel.askText.observe(viewLifecycleOwner) { ask ->
+            binding.ask.text = ask
+        }
+
+        // Set up click listeners for cards
+        /*setupCardClickListeners()*/
+    }
+
+    /*private fun setupCardClickListeners() {
+        binding.diagnosisCard.setOnClickListener { view ->
+            //Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_diagnosisFragment)
+        }
+
+        binding.historyDiseaseCard.setOnClickListener { view ->
+            //Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_historyDiseaseFragment)
+        }
+
+        binding.medicineHistoryCard.setOnClickListener { view ->
+            //Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_medicineHistoryFragment)
+        }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

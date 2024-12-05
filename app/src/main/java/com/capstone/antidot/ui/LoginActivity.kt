@@ -2,6 +2,7 @@ package com.capstone.antidot.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -42,6 +43,7 @@ class LoginActivity : AppCompatActivity() {
                     withContext(Dispatchers.Main) {
                         if (response.status == "success") {
                             val token = response.token
+                            Log.d("LoginActivity", "Token received: $token") // Debug log
                             if (token.isNullOrEmpty()) {
                                 Toast.makeText(this@LoginActivity, "Token tidak valid", Toast.LENGTH_SHORT).show()
                                 return@withContext
@@ -52,6 +54,7 @@ class LoginActivity : AppCompatActivity() {
                             finish()
                         } else {
                             Toast.makeText(this@LoginActivity, response.message, Toast.LENGTH_SHORT).show()
+                            Log.e("LoginActivity", "Login failed: ${response.message}") // Debug log
                         }
                     }
                 } catch (e: IOException) {
