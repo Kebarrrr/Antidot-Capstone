@@ -5,6 +5,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Suppress("HardcodedStringLiteral")
 object RetrofitClient {
+    class ApiService {
+
+    }
+
     private const val BASE_URL = "https://backend-dot-united-planet-442804-p8.et.r.appspot.com/"
 
     val instance: ApiService by lazy {

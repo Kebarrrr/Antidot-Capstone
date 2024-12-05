@@ -35,4 +35,7 @@
     <string name="rekomendasi_obat">Rekomendasi Obat</string>
     <string name="dosis">Dosis</string>
     <string name="deskripsi">Deskripsi</string>
+    <string name="hiusername">Hi, Username!</string>
+    <string name="ask">Bagaimana kabarmu hari ini?</string>
+    <string name="profile_picture">Profile Picture</string>
 </resources>

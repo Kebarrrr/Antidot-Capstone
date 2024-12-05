@@ -57,4 +57,7 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.security.crypto)
+    implementation(libs.circleimageview)
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
 }

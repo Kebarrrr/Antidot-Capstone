@@ -2,8 +2,10 @@ package com.capstone.antidot.api
 
 import com.capstone.antidot.api.models.ApiResponse
 import com.capstone.antidot.api.models.RegisterRequest
+import com.capstone.antidot.api.models.UserData
 import com.capstone.antidot.api.models.UserRequest
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface ApiService {
@@ -12,4 +14,7 @@ interface ApiService {
 
     @POST("auth/register")
     suspend fun register(@Body request: RegisterRequest): ApiResponse
+
+    @GET("profile")
+    suspend fun userProfile(@Body request: UserData): ApiResponse
 }
