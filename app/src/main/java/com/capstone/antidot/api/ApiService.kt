@@ -1,5 +1,6 @@
 package com.capstone.antidot.api
 
+import com.capstone.antidot.api.models.AntibioticDetailResponse
 import com.capstone.antidot.api.models.AntibioticsItem
 import com.capstone.antidot.api.models.AntibioticsResponse
 import com.capstone.antidot.api.models.ApiResponse
@@ -18,9 +19,9 @@ interface ApiService {
     @POST("auth/register")
     suspend fun register(@Body request: RegisterRequest): ApiResponse
 
-    @GET("/antibiotics")
+    @GET("antibiotics")
     suspend fun getAntibiotics(): AntibioticsResponse
 
-    @GET("/antibiotics/{id}")
-    suspend fun getDetailAntibiotics(@Path("id") id: String): AntibioticsItem
+    @GET("antibiotics/{id}")
+    suspend fun getDetailAntibiotics(@Path("id") id: String): AntibioticDetailResponse
 }

@@ -1,6 +1,5 @@
 package com.capstone.antidot.ui.Antibiotics.Adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.capstone.antidot.api.models.AntibioticsItem
 import com.capstone.antidot.databinding.ItemAntibioticsBinding
 
-class EventAdapter(private val context : Context, private val onItemClick: (AntibioticsItem) -> Unit) :
+class EventAdapter(private val onItemClick: (AntibioticsItem) -> Unit) :
     ListAdapter<AntibioticsItem, EventAdapter.MyViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -29,8 +28,8 @@ class EventAdapter(private val context : Context, private val onItemClick: (Anti
 
     class MyViewHolder(val binding: ItemAntibioticsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(event: AntibioticsItem) {
-            binding.tvItemName.text = event.antibioticName
-            binding.tvItemDescription.text = event.description
+            binding.tvItemName.text = event.antibioticsName
+            binding.tvItemDescription.text = event.antibioticsUsage
 
             Glide.with(binding.imgItemPhoto.context)
                 .load(event.antibioticImage)

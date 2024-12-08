@@ -15,7 +15,6 @@ object RetrofitClient {
     private var retrofit: Retrofit? = null
 
     fun getInstance(context: Context): ApiService {
-        val token = SessionManager(context).getToken() // Ambil token dari SessionManager
         val client = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val token = SessionManager(context).getToken()
