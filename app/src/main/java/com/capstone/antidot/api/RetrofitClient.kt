@@ -10,6 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Suppress("HardcodedStringLiteral")
 object RetrofitClient {
+
     private const val BASE_URL = "https://backend-dot-united-planet-442804-p8.et.r.appspot.com/"
 
     private var retrofit: Retrofit? = null

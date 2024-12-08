@@ -35,6 +35,9 @@
     <string name="rekomendasi_obat">Rekomendasi Obat</string>
     <string name="dosis">Dosis Per Hari</string>
     <string name="deskripsi">Deskripsi</string>
+    <string name="hiusername">Hi, Username!</string>
+    <string name="ask">Bagaimana kabarmu hari ini?</string>
+    <string name="profile_picture">Profile Picture</string>
     <string name="gambar_antibiotic">Gambar Antibiotic</string>
     <string name="deskripsi_obat">Deskripsi Obat</string>
     <string name="nama_antibiotics">Nama Antibiotics</string>
