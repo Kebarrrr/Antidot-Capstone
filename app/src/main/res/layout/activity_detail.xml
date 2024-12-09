@@ -17,20 +17,22 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp">
 
-        <View
-            android:id="@+id/icon"
+        <ImageButton
+            android:id="@+id/btn_back"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="25dp"
-            android:background="@drawable/ic_arrow_back" />
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_arrow_back"
+            android:contentDescription="@string/back"/>
 
         <TextView
-            android:id="@+id/diagnosis_title"
+            android:id="@+id/title_template"
             android:layout_width="146dp"
             android:layout_height="30dp"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="25dp"
-            android:text="Detail Antibiotic"
+            android:text="@string/detail_antibiotic"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textAppearance="@style/title" />

@@ -41,7 +41,10 @@ class DetailActivity : AppCompatActivity() {
 
         setupObservers()
         detailViewModel.fetchDetailAntibiotics(antibioticId)
-
+        // Menangani klik pada tombol kembali
+        binding.btnBack.setOnClickListener {
+            onBackPressed() // Atau bisa pakai finish() jika ingin langsung selesai
+        }
     }
 
     private fun setupObservers() {

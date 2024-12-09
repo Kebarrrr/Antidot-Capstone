@@ -20,15 +20,43 @@ data class AntibioticsResponse(
 @Parcelize
 data class AntibioticsItem(
 
-	@field:SerializedName("antibioticImage")
+	@field:SerializedName("antibiotics_dosage")
+	val antibioticsDosage: String,
+
+	@field:SerializedName("disease")
+	val disease: String,
+
+	@field:SerializedName("antibiotics_usage")
+	val antibioticsUsage: String,
+
+	@field:SerializedName("antibiotic_total_days_of_usage")
+	val antibioticTotalDaysOfUsage: Int,
+
+	@field:SerializedName("antibiotic_image")
 	val antibioticImage: String,
 
-	@field:SerializedName("antibioticName")
-	val antibioticName: String,
+	@field:SerializedName("antibiotics_name")
+	val antibioticsName: String,
 
-	@field:SerializedName("description")
-	val description: String,
+	@field:SerializedName("antibiotic_frequency_usage_per_day")
+	val antibioticFrequencyUsagePerDay: String,
+
+	@field:SerializedName("others")
+	val others: String,
 
 	@field:SerializedName("antibioticID")
 	val antibioticID: Int
+) : Parcelable
+
+@Parcelize
+data class AntibioticDetailResponse(
+
+	@field:SerializedName("message")
+	val message: String,
+
+	@field:SerializedName("antibioticByID")
+	val antibioticByID: AntibioticsItem,
+
+	@field:SerializedName("status")
+	val status: String
 ) : Parcelable

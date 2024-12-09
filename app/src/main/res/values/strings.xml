@@ -41,4 +41,7 @@
     <string name="gambar_antibiotic">Gambar Antibiotic</string>
     <string name="deskripsi_obat">Deskripsi Obat</string>
     <string name="nama_antibiotics">Nama Antibiotics</string>
+    <string name="click_add_button">Click the plus button to add</string>
+    <string name="back">Back</string>
+    <string name="detail_antibiotic">Detail Antibiotic</string>
 </resources>

@@ -10,7 +10,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="4dp"
-    android:layout_marginTop="0dp"
+    android:layout_marginTop="4dp"
     card_view:cardCornerRadius="10dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
