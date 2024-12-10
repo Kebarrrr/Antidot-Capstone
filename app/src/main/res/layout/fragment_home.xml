@@ -42,7 +42,7 @@
         android:id="@+id/ask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:text="@string/ask"
         android:textAppearance="@style/ask"
@@ -75,12 +75,12 @@
 
             <ImageView
                 android:id="@+id/diagnosis_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="67dp"
+                android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:contentDescription="Diagnosis Icon"
-                android:src="@drawable/ic_home_black_24dp" />
+                android:src="@drawable/diagnosis" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -89,7 +89,8 @@
                 android:layout_marginTop="8dp"
                 android:text="Diagnosis Penyakit"
                 android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:textSize="13sp"
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <Space
@@ -109,21 +110,22 @@
 
             <ImageView
                 android:id="@+id/history_disease_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="67dp"
+                android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:contentDescription="Disease History Icon"
-                android:src="@drawable/ic_home_black_24dp" />
+                android:src="@drawable/riwayatpenyakit" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="8dp"
-                android:text="Riwayat Penyakit"
+                android:text="Riwayat  Penyakit"
                 android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:textSize="13sp"
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <!-- Card 3: Medicine History -->
@@ -139,12 +141,12 @@
 
             <ImageView
                 android:id="@+id/history_medicine_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="67dp"
+                android:layout_height="65dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
                 android:contentDescription="Medicine History Icon"
-                android:src="@drawable/ic_home_black_24dp" />
+                android:src="@drawable/riwayatobat" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -153,7 +155,8 @@
                 android:layout_marginTop="8dp"
                 android:text="Riwayat Konsumsi Obat"
                 android:textColor="@android:color/black"
-                android:textSize="12sp" />
+                android:textSize="13sp"
+                android:textAlignment="center"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -162,6 +165,8 @@
         android:id="@+id/rv_antibiotics"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
         android:clipToPadding="false"
         android:paddingBottom="?attr/actionBarSize"
         app:layout_constraintBottom_toBottomOf="parent"
