@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Antidot"
         tools:targetApi="31">
         <activity
+            android:name=".ui.Reminder.AddReminderActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.Antibiotics.DetailAntibiotics.DetailActivity"
             android:exported="false" />
         <activity

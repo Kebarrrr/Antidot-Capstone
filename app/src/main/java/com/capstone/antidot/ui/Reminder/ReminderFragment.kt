@@ -1,5 +1,6 @@
 package com.capstone.antidot.ui.Reminder
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +8,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import com.capstone.antidot.R
 import com.capstone.antidot.databinding.FragmentReminderBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ReminderFragment : Fragment() {
 
@@ -28,10 +33,15 @@ class ReminderFragment : Fragment() {
         _binding = FragmentReminderBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-       /* val textView: TextView = binding.textDashboard
-        reminderViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }*/
+        // Menyambungkan FAB dengan ID di layout
+        val fabAddReminder: FloatingActionButton = binding.fabAddReminder
+
+        // Mengatur listener untuk FAB
+        fabAddReminder.setOnClickListener { view ->
+            // Intent untuk membuka AddReminderActivity
+            val intent = Intent(requireContext(), AddReminderActivity::class.java)
+            startActivity(intent)
+        }
         return root
     }
 
