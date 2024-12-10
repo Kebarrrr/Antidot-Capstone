@@ -44,4 +44,5 @@
     <string name="click_add_button">Click the plus button to add</string>
     <string name="back">Back</string>
     <string name="detail_antibiotic">Detail Antibiotic</string>
+    <string name="button_to_add_reminder">Button to Add Reminder</string>
 </resources>
