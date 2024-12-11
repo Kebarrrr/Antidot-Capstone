@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.antidot.R
@@ -18,7 +19,7 @@ class DiagnosisAdapter(
     inner class DiagnosisViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val gejalaTextView: TextView = view.findViewById(R.id.gejala_1)
         val diagnosisEditText: EditText = view.findViewById(R.id.diagnosis_1)
-        val deleteButton: Button = view.findViewById(R.id.btn_delete)
+        val deleteButton: ImageButton = view.findViewById(R.id.btn_delete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiagnosisViewHolder {
