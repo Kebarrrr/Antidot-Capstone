@@ -30,7 +30,10 @@ data class AntibioticsItem(
 	val antibioticsUsage: String,
 
 	@field:SerializedName("antibiotic_total_days_of_usage")
-	val antibioticTotalDaysOfUsage: Int,
+	val antibioticTotalDaysOfUsage: String,
+
+	@field:SerializedName("antibiotics_description")
+	val antibioticsDescription: String,
 
 	@field:SerializedName("antibiotic_image")
 	val antibioticImage: String,

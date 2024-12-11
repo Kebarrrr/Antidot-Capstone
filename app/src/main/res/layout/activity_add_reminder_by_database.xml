@@ -5,9 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F7F7"
-    tools:context=".ui.Reminder.AddReminderActivity">
-
+    tools:context=".ui.Reminder.AddReminderByDatabaseActivity">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -52,29 +50,75 @@
             android:textStyle="bold" />
     </RelativeLayout>
 
-
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="0dp"
+    <TextView
+        android:id="@+id/tv_nama_obat"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="8dp"
-        android:background="#ECE6F0"
-        android:iconifiedByDefault="false"
-        android:queryHint="Which antibiotic to consume?"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="47dp"
+        android:text="Nama Obat"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvReminder"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/obat"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="39dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_nama_obat"
+        tools:text="Obat" />
+
+    <TextView
+        android:id="@+id/tv_dosis_obat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="20dp"
+        android:text="Dosis Obat"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/obat" />
+
+    <TextView
+        android:id="@+id/dosis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="39dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_dosis_obat"
+        tools:text="Dosis per Hari" />
+
+    <TextView
+        android:id="@+id/tv_jam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="20dp"
+        android:text="Jam Reminder"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dosis" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_jam"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_jam" />
+
+    <Button
+        android:id="@+id/btn_save_reminder"
+        android:layout_width="350dp"
+        android:layout_height="48dp"
+        android:background="@drawable/primary_color"
+        android:text="Save Reminder"
+        android:layout_marginTop="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
-
+        app:layout_constraintTop_toBottomOf="@+id/rv_jam" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,4 +46,5 @@
     <string name="detail_antibiotic">Detail Antibiotic</string>
     <string name="button_to_add_reminder">Button to Add Reminder</string>
     <string name="delete">Hapus</string>
+    <string name="alarm_time">Waktu Alarm</string>
 </resources>
