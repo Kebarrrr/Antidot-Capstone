@@ -29,8 +29,8 @@ class DiagnosisAdapter(
 
     override fun onBindViewHolder(holder: DiagnosisViewHolder, position: Int) {
         val symptom = symptoms[position]
-        holder.gejalaTextView.text = symptom.name
-        holder.diagnosisEditText.hint = "Enter diagnosis for ${symptom.name}"
+        holder.gejalaTextView.text = symptom.symptoms[0]
+        holder.diagnosisEditText.hint = "Enter diagnosis for ${symptom.symptoms[0]}"
 
         // Tampilkan atau sembunyikan tombol "Delete"
         if (symptom.isUserAdded) {
@@ -51,4 +51,3 @@ class DiagnosisAdapter(
         notifyItemRangeChanged(position, symptoms.size)
     }
 }
-
