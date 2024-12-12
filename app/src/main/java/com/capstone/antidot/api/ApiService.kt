@@ -5,6 +5,7 @@ import com.capstone.antidot.api.models.AntibioticsResponse
 import com.capstone.antidot.api.models.ApiResponse
 import com.capstone.antidot.api.models.RegisterRequest
 import com.capstone.antidot.api.models.ReminderRequest
+import com.capstone.antidot.api.models.ReminderRequestByID
 import com.capstone.antidot.api.models.ReminderResponse
 import com.capstone.antidot.api.models.UserRequest
 import com.capstone.antidot.api.models.UserResponse
@@ -24,6 +25,9 @@ interface ApiService {
 
     @POST("reminders/create")
     suspend fun postReminder(@Body request: ReminderRequest) : ApiResponse
+
+    @POST("reminders/create")
+    suspend fun postReminderByID(@Body request: ReminderRequestByID) : ApiResponse
 
     @GET("profile")
     suspend fun userProfile(): UserResponse

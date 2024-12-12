@@ -120,7 +120,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_jam" />
 
     <Button
-        android:id="@+id/btn_save_reminder"
+        android:id="@+id/btn_save_reminder_user"
         android:layout_width="350dp"
         android:layout_height="48dp"
         android:background="@drawable/primary_color"
