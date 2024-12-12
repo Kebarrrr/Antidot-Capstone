@@ -14,6 +14,12 @@
         android:contentDescription="@string/logo_antidot"
         android:src="@drawable/antidot" />
 
+    <ImageView
+        android:layout_width="274dp"
+        android:layout_height="233dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/antidot" />
+
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
@@ -35,35 +41,35 @@
 
     <EditText
         android:id="@+id/ed_login_email"
-        android:layout_width="match_parent"
+        android:layout_width="352dp"
         android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/edit_text_background"
         android:hint="@string/email"
         android:importantForAutofill="no"
         android:inputType="textEmailAddress"
-        android:background="@drawable/edit_text_background"
-        android:padding="12dp"
-        android:layout_marginBottom="8dp" />
+        android:padding="12dp" />
 
     <EditText
         android:id="@+id/ed_login_password"
-        android:layout_width="match_parent"
+        android:layout_width="355dp"
         android:layout_height="48dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/edit_text_background"
         android:hint="@string/password"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        android:background="@drawable/edit_text_background"
-        android:padding="12dp"
-        android:layout_marginBottom="16dp" />
+        android:padding="12dp" />
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="match_parent"
+        android:layout_width="352dp"
         android:layout_height="48dp"
-        android:text="@string/sign_in"
-        android:textSize="16sp"
+        android:layout_marginBottom="16dp"
         android:backgroundTint="#4A90E2"
+        android:text="@string/sign_in"
         android:textColor="#FFF"
-        android:layout_marginBottom="16dp" />
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_go_to_register"

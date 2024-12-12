@@ -23,6 +23,7 @@ import com.capstone.antidot.AlarmReceiver
 import com.capstone.antidot.R
 import java.util.Calendar
 import android.provider.Settings
+import androidx.annotation.RequiresApi
 import com.capstone.antidot.api.RetrofitClient
 import com.capstone.antidot.api.models.ReminderRequest
 import kotlinx.coroutines.CoroutineScope
@@ -40,6 +41,7 @@ class AddReminderByDatabaseActivity : AppCompatActivity() {
     private lateinit var timeAdapter: TimeAdapter
 
     // Launcher untuk permintaan izin
+    @RequiresApi(Build.VERSION_CODES.S)
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
             // Jika izin diberikan, lanjutkan untuk mengatur alarm

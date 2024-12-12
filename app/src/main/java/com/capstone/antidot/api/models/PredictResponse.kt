@@ -42,6 +42,9 @@ data class Diagnosis(
 	@field:SerializedName("diagnosisID")
 	val diagnosisID: Int,
 
+	@field:SerializedName("antibioticID")
+	val antibioticID: Int,
+
 	@field:SerializedName("disease")
 	val disease: String,
 

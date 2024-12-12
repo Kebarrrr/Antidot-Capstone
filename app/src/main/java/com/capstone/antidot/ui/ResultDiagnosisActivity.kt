@@ -1,5 +1,6 @@
 package com.capstone.antidot.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -11,6 +12,7 @@ import com.capstone.antidot.R
 import com.capstone.antidot.api.RetrofitClient
 import com.capstone.antidot.api.models.AntibioticFrequency
 import com.capstone.antidot.api.models.Diagnosis
+import com.capstone.antidot.ui.Reminder.AddReminderByDatabaseActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -76,6 +78,15 @@ class ResultDiagnosisActivity : AppCompatActivity() {
     }
 
     private fun createReminder() {
-        // Code to create a reminder for the user
+        // Ensure diagnosis is not null and pass antibioticID as a string to the next activity
+        diagnosis?.antibioticID?.let { antibioticID ->
+            val intent = Intent(this, AddReminderByDatabaseActivity::class.java)
+            intent.putExtra("EVENT_ID", antibioticID.toString())
+            startActivity(intent)
+            finish()
+        } ?: run {
+            // Handle the case where diagnosis or antibioticID is null
+            Toast.makeText(this, "Invalid antibiotic ID", Toast.LENGTH_SHORT).show()
+        }
     }
 }
