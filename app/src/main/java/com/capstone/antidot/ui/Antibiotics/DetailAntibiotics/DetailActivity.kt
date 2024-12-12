@@ -67,8 +67,13 @@ class DetailActivity : AppCompatActivity() {
     private fun displayAntibioticDetails(antibiotic: AntibioticsItem) {
         binding.apply {
             tvItemName.text = antibiotic.antibioticsName
-            isiDeskripsi.text = antibiotic.antibioticsUsage
-            isiDosis.text = antibiotic.antibioticFrequencyUsagePerDay
+            tvPharmacologicalTherapy.text = antibiotic.others
+            isiDosis.text = antibiotic.antibioticsDosage
+            isiDosisPerhari.text = antibiotic.antibioticFrequencyUsagePerDay
+            isiDeskripsi.text = antibiotic.antibioticsDescription
+            isiDuration.text = antibiotic.antibioticTotalDaysOfUsage
+            isiUsage.text = antibiotic.antibioticsUsage
+
 
             Glide.with(this@DetailActivity)
                 .load(antibiotic.antibioticImage)

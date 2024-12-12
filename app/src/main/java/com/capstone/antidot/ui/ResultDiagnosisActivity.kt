@@ -71,8 +71,7 @@ class ResultDiagnosisActivity : AppCompatActivity() {
         // Set the diagnosis details to the views
         findViewById<TextView>(R.id.penyakit).text = diagnosis.disease
         findViewById<TextView>(R.id.rekomendasi_obat).text = diagnosis.antibioticName
-        val frequency = AntibioticFrequency.fromString(diagnosis.antibioticFrequencyUsagePerDay.toString())
-        findViewById<TextView>(R.id.dosis).text = frequency.toString()
+        findViewById<TextView>(R.id.dosis).text = diagnosis.antibioticsDosage
         findViewById<TextView>(R.id.deskripsi).text = diagnosis.diseaseDescription
     }
 

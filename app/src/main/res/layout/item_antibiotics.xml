@@ -51,7 +51,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             android:ellipsize="end"
-            android:maxLines="5"
+            android:maxLines="2"
             android:text="@string/deskripsi_obat"
             app:layout_constraintBottom_toBottomOf="@+id/imgItemPhoto"
             app:layout_constraintEnd_toEndOf="@+id/tvItemName"

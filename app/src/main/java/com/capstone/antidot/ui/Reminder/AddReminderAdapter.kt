@@ -52,7 +52,7 @@ class AddReminderAdapter(private val onItemClick: (AntibioticsItem) -> Unit) :
     class MyViewHolder(private val binding: ItemAntibioticsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(event: AntibioticsItem) {
             binding.tvItemName.text = event.antibioticsName
-            binding.tvItemDescription.text = event.antibioticsUsage
+            binding.tvItemDescription.text = event.disease
 
             Glide.with(binding.imgItemPhoto.context)
                 .load(event.antibioticImage)

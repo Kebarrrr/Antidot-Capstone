@@ -30,7 +30,7 @@ class EventAdapter(private val onItemClick: (AntibioticsItem) -> Unit) :
     class MyViewHolder(val binding: ItemAntibioticsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(event: AntibioticsItem) {
             binding.tvItemName.text = event.antibioticsName
-            binding.tvItemDescription.text = event.antibioticsUsage
+            binding.tvItemDescription.text = event.antibioticsDescription
 
             Glide.with(binding.imgItemPhoto.context)
                 .load(event.antibioticImage)

@@ -4,6 +4,7 @@ import com.capstone.antidot.api.models.AntibioticDetailResponse
 import com.capstone.antidot.api.models.AntibioticsItem
 import com.capstone.antidot.api.models.AntibioticsResponse
 import com.capstone.antidot.api.models.ApiResponse
+import com.capstone.antidot.api.models.NewsResponse
 import com.capstone.antidot.api.models.PredictResponse
 import com.capstone.antidot.api.models.RegisterRequest
 import com.capstone.antidot.api.models.ReminderRequest
@@ -58,4 +59,7 @@ interface ApiService {
 
     @GET("antibiotics/{id}")
     suspend fun getDetailAntibiotics(@Path("id") id: String): AntibioticDetailResponse
+
+    @GET("articles")
+    suspend fun getArticle(): NewsResponse
 }

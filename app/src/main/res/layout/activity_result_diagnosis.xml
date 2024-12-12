@@ -101,7 +101,7 @@
         android:id="@+id/dosis_title"
         android:layout_width="116.42dp"
         android:layout_height="20dp"
-        android:text="@string/dosis"
+        android:text="@string/dosis_title"
         android:textAppearance="@style/label"
         android:textSize="12sp"
         android:layout_marginStart="40dp"
@@ -133,7 +133,7 @@
     <TextView
         android:id="@+id/deskripsi"
         android:layout_width="338dp"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:text="@string/text_holder"
         android:textAppearance="@style/viewtext"
         android:lineSpacingExtra="4sp"
