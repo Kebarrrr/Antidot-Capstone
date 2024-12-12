@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -69,17 +70,37 @@ class AddReminderActivity : AppCompatActivity() {
 
         // Hubungkan SearchView dengan Adapter
         val searchView: SearchView = binding.searchView
+        val namaObatTextView: TextView = binding.namaObat
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    namaObatTextView.text = it
+                }
                 adapter.filter(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    namaObatTextView.text = "\"$it\" Add Obat"
+                }
                 adapter.filter(newText)
                 return true
             }
         })
+
+        // Tombol untuk menuju AddReminderByUserActivity
+        binding.btnAddUnknownAntibiotic.setOnClickListener {
+            val namaObat = binding.searchView.query.toString()
+            if (namaObat.isNotEmpty()) {
+                val intent = Intent(this, AddReminderByUserActivity::class.java)
+                intent.putExtra("NAMA_OBAT", namaObat) // Mengirimkan nama obat
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Nama obat tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // Ambil data dari ViewModel
         lifecycleScope.launch {

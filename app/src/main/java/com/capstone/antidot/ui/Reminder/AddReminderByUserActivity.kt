@@ -10,36 +10,41 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
+import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.antidot.AlarmReceiver
 import com.capstone.antidot.R
-import java.util.Calendar
-import android.provider.Settings
 import com.capstone.antidot.api.RetrofitClient
 import com.capstone.antidot.api.models.ReminderRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 
-class AddReminderByDatabaseActivity : AppCompatActivity() {
+class AddReminderByUserActivity : AppCompatActivity() {
 
     private lateinit var rvJam: RecyclerView
     private lateinit var progressBar: ProgressBar
     private lateinit var btnSaveReminder: Button
     private var doses: List<String> = listOf("06:00", "15:00", "22:00") // Dosis default
-    private lateinit var addreminderbydataViewModel: AddReminderByDatabaseViewModel
     private lateinit var timeAdapter: TimeAdapter
 
-    // Launcher untuk permintaan izin
+
     private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
             // Jika izin diberikan, lanjutkan untuk mengatur alarm
@@ -55,59 +60,70 @@ class AddReminderByDatabaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_reminder_by_database)
+        setContentView(R.layout.activity_add_reminder_by_user)
 
-        // Ambil antibioticID dari Intent
-        val antibioticID = intent.getStringExtra("EVENT_ID")
+        val namaObat = intent.getStringExtra("NAMA_OBAT")
 
-        // Inisialisasi UI komponen
         rvJam = findViewById(R.id.rv_jam)
         progressBar = findViewById(R.id.progressBar)
         btnSaveReminder = findViewById(R.id.btn_save_reminder)
 
-        // Setup ViewModel
-        addreminderbydataViewModel = ViewModelProvider(
-            this,
-            AddReminderByDatabaseViewModelFactory(application)
-        )[AddReminderByDatabaseViewModel::class.java]
+        val obatTextView: TextView = findViewById(R.id.obat)
+        obatTextView.text = namaObat ?: "Nama Obat Tidak Ditemukan"
 
-        // Ambil data antibiotik berdasarkan antibioticID
-        addreminderbydataViewModel.getAntibioticById(antibioticID.toString())
+        val dosisOptions = arrayOf("1x sehari", "2x sehari", "3x sehari")  // Pilihan dosis
+        Log.d("DosisOptions", dosisOptions.joinToString(", "))  // Pastikan data ada
 
-        // Observe data yang diterima dari ViewModel
-        addreminderbydataViewModel.antibiotic.observe(this) { antibiotic ->
-            findViewById<TextView>(R.id.obat).text = antibiotic.antibioticsName
-            findViewById<TextView>(R.id.dosis).text = antibiotic.antibioticFrequencyUsagePerDay
+        val dosisAdapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, dosisOptions)
 
-            // Tentukan dosis berdasarkan frekuensi
-            val dosageFrequency = antibiotic.antibioticFrequencyUsagePerDay
+        // Menyambungkan adapter ke AutoCompleteTextView
+        val dosisAutoCompleteTextView: AutoCompleteTextView = findViewById(R.id.dosis)
+        dosisAutoCompleteTextView.setAdapter(dosisAdapter)
+        dosisAutoCompleteTextView.setThreshold(1)  // Tampilkan dropdown setelah 1 karakter
 
-            // Atur dosis default berdasarkan frekuensi
-            doses = when (dosageFrequency) {
-                "1x sehari" -> listOf("06:00") // 1x sehari
-                "2x sehari" -> listOf("06:00", "15:00") // 2x sehari
-                "3x sehari" -> listOf("06:00", "15:00", "22:00") // 3x sehari
-                else -> listOf("06:00") // Default jika tidak sesuai
-            }
-
-            // Setup RecyclerView untuk menampilkan waktu dosis
-            setupRecyclerView()
-
-            // Menyimpan reminder dan mengatur alarm
-            btnSaveReminder.setOnClickListener {
-                // Meminta izin untuk alarm sebelum menyimpan
-                checkExactAlarmPermission()
-
-                // Kirim reminder ke API
-                postReminderToAPI(antibiotic.antibioticID, dosageFrequency)
-            }
+        // Setup listener untuk menangani perubahan pada AutoCompleteTextView
+        dosisAutoCompleteTextView.addTextChangedListener {
+            val selectedDosis = it.toString()
+            updateDosesBasedOnSelection(selectedDosis)
         }
 
-        // Setup RecyclerView
+        // Setup RecyclerView dan timeAdapter
         setupRecyclerView()
+
+        // Menampilkan dosis pertama kali berdasarkan default
+        val selectedDosis = dosisAutoCompleteTextView.text.toString()
+        updateDosesBasedOnSelection(selectedDosis)
     }
 
-    // Setup RecyclerView untuk menampilkan dosis
+    private var hasShownToast = false
+
+    // Fungsi untuk memperbarui list dosis berdasarkan pilihan
+    private fun updateDosesBasedOnSelection(selectedDosis: String) {
+        doses = when (selectedDosis) {
+            "1x sehari" -> listOf("06:00")  // 1x sehari
+            "2x sehari" -> listOf("06:00", "15:00")  // 2x sehari
+            "3x sehari" -> listOf("06:00", "15:00", "22:00")  // 3x sehari
+            else -> listOf()  // Default jika tidak sesuai
+        }
+
+        if (doses.isEmpty() && !hasShownToast) {
+            Toast.makeText(this, "Tidak ada dosis yang tersedia, Masukan 1x, 2x atau 3x sehari", Toast.LENGTH_SHORT).show()
+            hasShownToast = true  // Tandai bahwa Toast sudah ditampilkan
+        }
+
+        // Jika dosis valid, reset flag untuk Toast
+        if (doses.isNotEmpty()) {
+            hasShownToast = false
+        }
+
+        // Pastikan timeAdapter sudah diinisialisasi sebelum dipanggil
+        if (::timeAdapter.isInitialized) {
+            timeAdapter.updateData(doses)
+        } else {
+            Log.e("AddReminderByUserActivity", "TimeAdapter belum diinisialisasi.")
+        }
+    }
+
     private fun setupRecyclerView() {
         rvJam.layoutManager = LinearLayoutManager(this)
         timeAdapter = TimeAdapter(doses) { time ->
@@ -208,15 +224,15 @@ class AddReminderByDatabaseActivity : AppCompatActivity() {
                 val response = apiService.postReminder(reminderRequest)
                 withContext(Dispatchers.Main) {
                     if (response.status == "success") {
-                        Toast.makeText(this@AddReminderByDatabaseActivity, response.message, Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@AddReminderByUserActivity, response.message, Toast.LENGTH_SHORT).show()
                         finish()
                     } else {
-                        Toast.makeText(this@AddReminderByDatabaseActivity, "Gagal menyimpan pengingat", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@AddReminderByUserActivity, "Gagal menyimpan pengingat", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@AddReminderByDatabaseActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AddReminderByUserActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }

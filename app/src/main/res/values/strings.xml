@@ -47,4 +47,6 @@
     <string name="button_to_add_reminder">Button to Add Reminder</string>
     <string name="delete">Hapus</string>
     <string name="alarm_time">Waktu Alarm</string>
+    <string name="add_unknown_antibiotic">Add Unknown Antibiotic</string>
+    <string name="berapa_dosis_per_hari_ex_1x_sehari">Berapa dosis per hari (ex: 1x sehari)</string>
 </resources>

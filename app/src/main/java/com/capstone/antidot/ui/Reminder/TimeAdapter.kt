@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.antidot.R
 
-class TimeAdapter(private val timeList: List<String>,  private val onTimeChanged: (String) -> Unit) : RecyclerView.Adapter<TimeAdapter.TimeViewHolder>() {
+class TimeAdapter(private var timeList: List<String>, private val onTimeChanged: (String) -> Unit) : RecyclerView.Adapter<TimeAdapter.TimeViewHolder>() {
 
     inner class TimeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvTime: TextView = itemView.findViewById(R.id.tv_time)
@@ -34,5 +34,9 @@ class TimeAdapter(private val timeList: List<String>,  private val onTimeChanged
 
     override fun getItemCount(): Int {
         return timeList.size
+    }
+    fun updateData(newDoses: List<String>) {
+        timeList = newDoses
+        notifyDataSetChanged()  // Memberitahu adapter bahwa data telah berubah
     }
 }
