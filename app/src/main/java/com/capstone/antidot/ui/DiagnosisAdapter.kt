@@ -3,24 +3,22 @@ package com.capstone.antidot.ui
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.antidot.R
-import com.capstone.antidot.api.models.Symptom
+import com.capstone.antidot.api.models.Symptoms
+import com.capstone.antidot.api.models.SymptomsRequest
 
 class DiagnosisAdapter(
-    private val symptoms: MutableList<Symptom>,
-    private val onDeleteClick: (Int) -> Unit
+    private val symptoms: MutableList<Symptoms>,
+    private val onRemoveClick: (position: Int) -> Unit
 ) : RecyclerView.Adapter<DiagnosisAdapter.DiagnosisViewHolder>() {
 
-    inner class DiagnosisViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val gejalaTextView: TextView = view.findViewById(R.id.gejala_1)
-        val diagnosisEditText: EditText = view.findViewById(R.id.diagnosis_1)
-        val deleteButton: ImageButton = view.findViewById(R.id.btn_delete)
-    }
+    private val userInputs = mutableListOf<String>()
+    private val limitedSymptoms = symptoms.take(3).toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DiagnosisViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_diagnosis, parent, false)
@@ -28,26 +26,60 @@ class DiagnosisAdapter(
     }
 
     override fun onBindViewHolder(holder: DiagnosisViewHolder, position: Int) {
-        val symptom = symptoms[position]
-        holder.gejalaTextView.text = symptom.symptoms[0]
-        holder.diagnosisEditText.hint = "Enter diagnosis for ${symptom.symptoms[0]}"
+        val symptom = limitedSymptoms[position]
+        val autoCompleteTextView = holder.itemView.findViewById<AutoCompleteTextView>(R.id.autoCompleteDiagnosis)
 
-        // Tampilkan atau sembunyikan tombol "Delete"
-        if (symptom.isUserAdded) {
-            holder.deleteButton.visibility = View.VISIBLE
-            holder.deleteButton.setOnClickListener {
-                onDeleteClick(position) // Callback untuk hapus item
+        val symptomNames = symptoms.map { it.symptomName }
+        val adapter = ArrayAdapter(holder.itemView.context, android.R.layout.simple_dropdown_item_1line, symptomNames)
+        autoCompleteTextView.setAdapter(adapter)
+        autoCompleteTextView.setText(symptom.symptomName, false)
+
+        autoCompleteTextView.addTextChangedListener { editable ->
+            symptom.symptomName = editable.toString()
+
+            // Mark the symptom as selected when the user starts typing
+            if (editable != null) {
+                if (editable.isNotEmpty()) {
+                    symptom.isSelected = true
+                }
             }
-        } else {
-            holder.deleteButton.visibility = View.GONE
+
+            // Save the user input in the list
+            if (position < userInputs.size) {
+                userInputs[position] = editable.toString()
+            } else {
+                userInputs.add(editable.toString())
+            }
+        }
+
+
+        val btnRemoveSymptom: AppCompatImageButton = holder.itemView.findViewById(R.id.btn_delete)
+        btnRemoveSymptom.setOnClickListener {
+            onRemoveClick(position)
+            userInputs.removeAt(position)
+
+            if (limitedSymptoms.size < 3) {
+                limitedSymptoms.add(Symptoms(""))
+                notifyItemInserted(limitedSymptoms.size - 1)
+            }
         }
     }
 
-    override fun getItemCount(): Int = symptoms.size
-
-    fun removeSymptom(position: Int) {
-        symptoms.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, symptoms.size)
+    fun getUserInputs(): List<String> {
+        val userInputs = mutableListOf<String>()
+        // Loop through symptoms and add only those that are selected and not empty
+        for (symptom in symptoms) {
+            if (symptom.symptomName.isNotEmpty() && symptom.isSelected) {
+                userInputs.add(symptom.symptomName)
+            }
+        }
+        return userInputs
     }
+
+
+    override fun getItemCount(): Int {
+        return limitedSymptoms.size
+    }
+
+    class DiagnosisViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }

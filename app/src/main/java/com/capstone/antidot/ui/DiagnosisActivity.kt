@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.capstone.antidot.R
 import com.capstone.antidot.api.RetrofitClient
-import com.capstone.antidot.api.models.Symptom
+import com.capstone.antidot.api.models.Symptoms
 import com.capstone.antidot.api.models.SymptomsRequest
+import com.capstone.antidot.api.models.SymptomsResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -21,81 +22,95 @@ import java.io.IOException
 class DiagnosisActivity : AppCompatActivity() {
 
     private lateinit var adapter: DiagnosisAdapter
-    private lateinit var symptoms: MutableList<Symptom>
+    private lateinit var symptoms: MutableList<Symptoms>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_diagnosis)
 
-        // Data awal (symptom bawaan)
-        symptoms = mutableListOf(
-            Symptom(arrayOf("Gejala 1")),
-            Symptom(arrayOf("Gejala 2")),
-            Symptom(arrayOf("Gejala 3"))
-        )
+        symptoms = mutableListOf(Symptoms(symptomName = ""), Symptoms(symptomName = ""), Symptoms(symptomName = ""))
 
-        // Inisialisasi RecyclerView
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         adapter = DiagnosisAdapter(symptoms) { position ->
-            adapter.removeSymptom(position)
+            symptoms.removeAt(position)
+            adapter.notifyItemRemoved(position)
+            if (symptoms.size < 3) {
+                symptoms.add(Symptoms(symptomName = ""))
+                adapter.notifyItemInserted(symptoms.size - 1)
+            }
         }
+
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
 
-        // Tambahkan symptom baru
-        val btnAddSymptom: Button = findViewById(R.id.btn_add_symptom)
-        btnAddSymptom.setOnClickListener {
-            val newSymptom = Symptom(arrayOf("Gejala ${symptoms.size + 1}"), true)
-            symptoms.add(newSymptom)
-            adapter.notifyItemInserted(symptoms.size - 1)
-        }
+        fetchSymptoms()
 
-        // Tombol untuk menganalisis gejala
         val btnAnalyze: Button = findViewById(R.id.btn_analyze)
-        btnAnalyze.setOnClickListener {
-            analyzeSymptoms()
+        btnAnalyze.setOnClickListener { analyzeSymptoms() }
+
+        val btnAddSymptom: Button = findViewById(R.id.btn_add_symptom)
+        btnAddSymptom.setOnClickListener { addSymptom() }
+    }
+
+    private fun fetchSymptoms() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            try {
+                val response = RetrofitClient.getInstance(this@DiagnosisActivity).getSymptoms()
+                if (response.status == "success") {
+                    symptoms.addAll(response.symptoms.map { Symptoms(it.symptomName) })
+                    adapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(this@DiagnosisActivity, "Failed to load symptoms", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@DiagnosisActivity, "Error fetching symptoms", Toast.LENGTH_SHORT).show()
+                Log.e("DiagnosisActivity", "Error fetching symptoms: ${e.message}")
+            }
+        }
+    }
+
+    private fun addSymptom() {
+        if (symptoms.size < 3) {
+            symptoms.add(Symptoms(symptomName = ""))
+            adapter.notifyItemInserted(symptoms.size - 1)
         }
     }
 
     private fun analyzeSymptoms() {
-        // Ambil gejala yang sudah dipilih
-        val initialSymptoms = symptoms.flatMap { it.symptoms.toList() } // Semua gejala (awal)
-        val selectedSymptoms = symptoms.filter { it.isUserAdded }.flatMap { it.symptoms.toList() } // Gejala yang dipilih
+        val selectedSymptomsNames = adapter.getUserInputs()
+        val nonEmptySymptoms = selectedSymptomsNames.filter { it.isNotEmpty() }
 
-        // Periksa apakah ada gejala yang dipilih
-        if (selectedSymptoms.isEmpty() && initialSymptoms.isEmpty()) {
-            Toast.makeText(this, "Pilih gejala terlebih dahulu", Toast.LENGTH_SHORT).show()
-            return
+        if (nonEmptySymptoms.isNotEmpty()) {
+            sendSymptomsToApi(nonEmptySymptoms)
+        } else {
+            Toast.makeText(this@DiagnosisActivity, "Please select symptoms", Toast.LENGTH_SHORT).show()
         }
+    }
 
-        // Kirimkan data ke API untuk mendapatkan diagnosis
+    private fun sendSymptomsToApi(symptoms: List<String>) {
+        val symptomsRequest = SymptomsRequest(symptoms)
+
         lifecycleScope.launch(Dispatchers.Main) {
             try {
-                // Membuat SymptomsRequest yang menggabungkan selectedSymptoms dan initialSymptoms
-                val symptomsRequest = SymptomsRequest(
-                    selectedSymptoms.toTypedArray(), // Mengubah menjadi Array
-                    initialSymptoms.toTypedArray()   // Mengubah menjadi Array
-                )
+                val response = RetrofitClient.getInstance(this@DiagnosisActivity).sendSymptoms(symptomsRequest)
+                Log.d("DiagnosisActivity", "Response: $response")
 
-                // Ambil Retrofit instance dan lakukan API call
-                val response = RetrofitClient.getInstance(this@DiagnosisActivity).diagnosis(symptomsRequest)
+                if (response.status == "success") {
+                    Toast.makeText(this@DiagnosisActivity, "Symptoms sent successfully", Toast.LENGTH_SHORT).show()
+                    val diagnosisID = response.diagnosis.diagnosisID // Extract diagnosisID here
 
-                // Periksa apakah response berhasil
-                if (response != null) {
-                    // Kirim hasil ke ResultDiagnosisActivity
+                    // Passing diagnosisID to ResultDiagnosisActivity
                     val intent = Intent(this@DiagnosisActivity, ResultDiagnosisActivity::class.java)
-                    intent.putExtra("diagnosisData", response) // Pastikan response bisa diterima di Activity tujuan
+                    intent.putExtra("diagnosisID", diagnosisID) // Send the diagnosisID to the next activity
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this@DiagnosisActivity, "Gagal mendapatkan hasil diagnosis", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DiagnosisActivity, "Failed to analyze symptoms", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: HttpException) {
-                val statusCode = e.code() // Kode status HTTP (misalnya 400, 500)
-                val errorMessage = e.message() // Pesan error dari server
-                Log.e("DiagnosisActivity", "HTTP Error: $statusCode, Message: $errorMessage")
-                Toast.makeText(this@DiagnosisActivity, "Kesalahan pada server", Toast.LENGTH_SHORT).show()
+                Log.e("DiagnosisActivity", "Error sending symptoms: ${e.message()}")
+                Toast.makeText(this@DiagnosisActivity, "Error connecting to server", Toast.LENGTH_SHORT).show()
             } catch (e: IOException) {
-                Toast.makeText(this@DiagnosisActivity, "Tidak ada koneksi internet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DiagnosisActivity, "No internet connection", Toast.LENGTH_SHORT).show()
             }
         }
     }

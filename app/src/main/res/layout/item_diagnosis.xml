@@ -8,38 +8,41 @@
         android:id="@+id/gejala_1"
         android:layout_width="116.42dp"
         android:layout_height="20dp"
+        android:layout_alignParentStart="true"
         android:text="@string/gejala_1"
         android:textAppearance="@style/label"
         android:textSize="12sp"
-        android:textStyle="bold"
-        android:layout_alignParentStart="true"/>
+        android:textStyle="bold" />
 
     <!-- EditText diagnosis_1 di bawah gejala_1 -->
-    <EditText
-        android:id="@+id/diagnosis_1"
+    <AutoCompleteTextView
+        android:id="@+id/autoCompleteDiagnosis"
         android:layout_width="350dp"
         android:layout_height="48dp"
+        android:layout_below="@id/gejala_1"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/edit_text_background"
+        android:focusableInTouchMode="true"
         android:hint="@string/isi_diagnosis"
         android:importantForAutofill="no"
         android:inputType="text"
         android:padding="16dp"
-        android:textSize="12sp"
-        android:layout_below="@id/gejala_1"
-        android:layout_marginTop="5dp"
-        android:focusableInTouchMode="true"/>
+        android:popupBackground="@android:color/white"
+        android:textSize="12sp" />
 
-    <ImageButton
+
+    <androidx.appcompat.widget.AppCompatImageButton
         android:id="@+id/btn_delete"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_alignTop="@id/autoCompleteDiagnosis"
         android:layout_alignParentEnd="true"
-        android:layout_alignTop="@id/diagnosis_1"
-        android:layout_marginEnd="30dp"
         android:layout_marginTop="10dp"
-        android:src="@drawable/baseline_delete_24"
+        android:layout_marginEnd="30dp"
         android:background="#00000000"
-        android:contentDescription="@string/delete" />
+        android:contentDescription="@string/delete"
+        android:src="@drawable/baseline_delete_24" />
 
 
 </RelativeLayout>

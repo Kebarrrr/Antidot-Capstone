@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/diagnosis_p"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToOutline="true"
+    android:background="#F7F7F7">
+
+    <View
+        android:id="@+id/icon"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="25dp"
+        android:gravity="center_vertical"
+        android:background="@drawable/ic_arrow_back"/>
+
+    <TextView
+        android:id="@+id/diagnosis_title"
+        android:layout_width="142dp"
+        android:layout_height="19dp"
+        android:layout_alignParentEnd="true"
+        android:textSize="16sp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="25dp"
+        android:gravity="center_vertical"
+        android:text="@string/result_diagnosis"
+        android:textAppearance="@style/title" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/result_diagnosis"
+        android:layout_centerHorizontal="true"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"
+        android:textColor="#000"
+        android:layout_marginTop="100dp"/>
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/this_is_your_result_diagnosis"
+        android:layout_centerHorizontal="true"
+        android:textSize="14sp"
+        android:textColor="#888"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="150dp"/>
+
+    <TextView
+        android:id="@+id/penyakit_title"
+        android:layout_width="116.42dp"
+        android:layout_height="20dp"
+        android:text="@string/penyakit"
+        android:textAppearance="@style/label"
+        android:textSize="12dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="200dp"/>
+
+    <TextView
+        android:id="@+id/penyakit"
+        android:layout_width="338dp"
+        android:layout_height="20dp"
+        android:text="@string/text_holder"
+        android:textAppearance="@style/viewtext"
+        android:lineSpacingExtra="4sp"
+        android:translationY="-1.8sp"
+        android:gravity="top"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="220dp"
+        />
+
+    <TextView
+        android:id="@+id/rekomendasi_obat_title"
+        android:layout_width="116.42dp"
+        android:layout_height="20dp"
+        android:text="@string/rekomendasi_obat"
+        android:textAppearance="@style/label"
+        android:textSize="12sp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="290dp"/>
+
+    <TextView
+        android:id="@+id/rekomendasi_obat"
+        android:layout_width="338dp"
+        android:layout_height="20dp"
+        android:text="@string/text_holder"
+        android:textAppearance="@style/viewtext"
+        android:lineSpacingExtra="4sp"
+        android:translationY="-1.8sp"
+        android:gravity="top"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="310dp"
+        />
+
+    <TextView
+        android:id="@+id/dosis_title"
+        android:layout_width="116.42dp"
+        android:layout_height="20dp"
+        android:text="@string/dosis"
+        android:textAppearance="@style/label"
+        android:textSize="12sp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="380dp"/>
+
+    <TextView
+        android:id="@+id/dosis"
+        android:layout_width="338dp"
+        android:layout_height="20dp"
+        android:text="@string/text_holder"
+        android:textAppearance="@style/viewtext"
+        android:lineSpacingExtra="4sp"
+        android:translationY="-1.8sp"
+        android:gravity="top"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="400dp"
+        />
+
+    <TextView
+        android:id="@+id/deskripsi_title"
+        android:layout_width="116.42dp"
+        android:layout_height="20dp"
+        android:text="@string/deskripsi"
+        android:textAppearance="@style/label"
+        android:textSize="12sp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="470dp"/>
+
+    <TextView
+        android:id="@+id/deskripsi"
+        android:layout_width="338dp"
+        android:layout_height="20dp"
+        android:text="@string/text_holder"
+        android:textAppearance="@style/viewtext"
+        android:lineSpacingExtra="4sp"
+        android:translationY="-1.8sp"
+        android:gravity="top"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="490dp"
+        />
+
+    <Button
+        android:id="@+id/btn_reminder"
+        android:layout_width="350dp"
+        android:layout_height="48dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/buat_reminder"
+        android:textSize="16sp"
+        android:background="@drawable/primary_color"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="560dp"/>
+
+</RelativeLayout>
