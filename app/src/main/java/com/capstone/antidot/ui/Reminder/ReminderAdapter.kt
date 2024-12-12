@@ -1,65 +1,141 @@
 package com.capstone.antidot.ui.Reminder
 
+import android.app.AlarmManager
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.capstone.antidot.api.models.AntibioticsItem
-import com.capstone.antidot.databinding.ItemAntibioticsBinding
+import com.capstone.antidot.AlarmReceiver
+import com.capstone.antidot.R
+import com.capstone.antidot.api.RetrofitClient
+import com.capstone.antidot.api.models.RemindersItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Response
 
-class ReminderAdapter(private val onItemClick: (AntibioticsItem) -> Unit) :
-    RecyclerView.Adapter<ReminderAdapter.MyViewHolder>() {
+class ReminderAdapter(private var reminderList: List<RemindersItem>, private val context: Context) :
+    RecyclerView.Adapter<ReminderAdapter.ReminderViewHolder>() {
 
-    private val originalList = mutableListOf<AntibioticsItem>()
-    private val filteredList = mutableListOf<AntibioticsItem>()
-
-    fun submitList(events: List<AntibioticsItem>) {
-        originalList.clear()
-        originalList.addAll(events)
-        filteredList.clear()
-        filteredList.addAll(events)
-        notifyDataSetChanged()
+    inner class ReminderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvItemJam: TextView = itemView.findViewById(R.id.tvItemJam)
+        val tvItemName: TextView = itemView.findViewById(R.id.tvItemName)
+        val btnDelete: ImageButton = itemView.findViewById(R.id.btn_delete_reminder)
     }
 
-    fun filter(query: String?) {
-        filteredList.clear()
-        if (query.isNullOrEmpty()) {
-            filteredList.addAll(originalList)
-        } else {
-            filteredList.addAll(originalList.filter {
-                it.antibioticsName.contains(query, ignoreCase = true)
-            })
-        }
-        notifyDataSetChanged()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ReminderViewHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_reminder, parent, false)
+        return ReminderViewHolder(view)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = ItemAntibioticsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MyViewHolder(binding)
-    }
+    override fun onBindViewHolder(holder: ReminderViewHolder, position: Int) {
+        val reminderItem = reminderList[position]
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val event = filteredList[position]
-        holder.bind(event)
+        holder.tvItemName.text = reminderItem.customAntibioticName
+        val reminderTimes = reminderItem.reminderTimes.joinToString("\n")
+        holder.tvItemJam.text = reminderTimes
 
-        holder.itemView.setOnClickListener {
-            onItemClick(event)
-        }
-    }
-
-    override fun getItemCount(): Int = filteredList.size
-
-    class MyViewHolder(private val binding: ItemAntibioticsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(event: AntibioticsItem) {
-            binding.tvItemName.text = event.antibioticsName
-            binding.tvItemDescription.text = event.antibioticsUsage
-
-            Glide.with(binding.imgItemPhoto.context)
-                .load(event.antibioticImage)
-                .into(binding.imgItemPhoto)
+        holder.btnDelete.setOnClickListener {
+            val alertDialog = android.app.AlertDialog.Builder(context)
+                .setTitle("Konfirmasi Penghapusan")
+                .setMessage("Apakah Anda yakin ingin menghapus pengingat ini?")
+                .setPositiveButton("Ya") { dialog, which ->
+                    deleteReminder(reminderItem.reminderID.toString())
+                }
+                .setNegativeButton("Tidak") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .create()
+            alertDialog.show()
         }
     }
 
+    override fun getItemCount(): Int {
+        return reminderList.size
+    }
 
+    fun updateList(newReminderList: List<RemindersItem>) {
+        val diffCallback = ReminderDiffCallback(reminderList, newReminderList)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+        reminderList = newReminderList
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    private fun deleteReminder(reminderId: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val apiService = RetrofitClient.getInstance(context)
+                val response: Response<Void> = apiService.deleteReminder(reminderId)
+
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        val indexToRemove = reminderList.indexOfFirst { it.reminderID.toString() == reminderId }
+                        if (indexToRemove != -1) {
+                            val removedItem = reminderList[indexToRemove]
+                            reminderList = reminderList.toMutableList().apply { removeAt(indexToRemove) }
+                            notifyItemRemoved(indexToRemove)
+
+                            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                            val notificationId = reminderId.hashCode()
+                            notificationManager.cancel(notificationId)
+
+                            // Membatalkan alarm
+                            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                            val intent = Intent(context, AlarmReceiver::class.java).apply {
+                                putExtra("REMINDER_ID", reminderId.hashCode())
+                            }
+                            val pendingIntent = PendingIntent.getBroadcast(
+                                context,
+                                reminderId.hashCode(),
+                                intent,
+                                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                            )
+
+                            alarmManager.cancel(pendingIntent)
+
+                            Toast.makeText(context, "Reminder deleted successfully", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Log.d("ReminderAdapter", "Failed to delete reminder: ${response.code()}")
+                        Toast.makeText(context, "Failed to delete reminder", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.e("ReminderAdapter", "Error deleting reminder", e)
+                    Toast.makeText(context, "Error deleting reminder", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+}
+
+class ReminderDiffCallback(
+    private val oldList: List<RemindersItem>,
+    private val newList: List<RemindersItem>
+) : DiffUtil.Callback() {
+
+    override fun getOldListSize(): Int = oldList.size
+
+    override fun getNewListSize(): Int = newList.size
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].reminderID == newList[newItemPosition].reminderID
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition] == newList[newItemPosition]
+    }
 }

@@ -14,9 +14,7 @@ class AddReminderByDatabaseViewModel (application: Application) : AndroidViewMod
     private val _antibiotic = MutableLiveData<AntibioticsItem>()
     val antibiotic: LiveData<AntibioticsItem> get() = _antibiotic
 
-    // Fungsi untuk mengambil data antibiotik berdasarkan ID
     fun getAntibioticById(antibioticID: String) {
-        // Misalnya, menggunakan repository untuk mengambil data
         viewModelScope.launch {
             val antibiotic = RetrofitClient.getInstance(getApplication()).getDetailAntibiotics(antibioticID)
             _antibiotic.postValue(antibiotic.antibioticByID)

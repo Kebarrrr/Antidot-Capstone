@@ -22,7 +22,7 @@
             android:id="@+id/tvItemJam"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="50sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,27 +33,29 @@
             android:id="@+id/tvItemName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="70dp"
             android:layout_marginTop="5dp"
-            android:textSize="20sp"
+            android:textSize="15sp"
+            android:textAlignment="viewEnd"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tvItemJam"
-            app:layout_constraintTop_toTopOf="@+id/tvItemJam"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/nama_antibiotics" />
 
-        <TextView
-            android:id="@+id/tvItemDescription"
-            android:layout_width="0dp"
+        <ImageButton
+            android:id="@+id/btn_delete_reminder"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:maxLines="5"
-            android:text="Ket Sebelum/Setelah Makan"
-            app:layout_constraintBottom_toBottomOf="@+id/tvItemJam"
-            app:layout_constraintEnd_toEndOf="@+id/tvItemName"
-            app:layout_constraintStart_toStartOf="@+id/tvItemName"
-            app:layout_constraintTop_toBottomOf="@+id/tvItemName"
-            app:layout_constraintVertical_bias="0.0"/>
+            android:background="#00000000"
+            android:contentDescription="@string/delete"
+            android:src="@drawable/baseline_delete_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

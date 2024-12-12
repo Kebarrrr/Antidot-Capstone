@@ -5,18 +5,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.SearchView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.capstone.antidot.R
 import com.capstone.antidot.databinding.ActivityAddReminderBinding
 import com.capstone.antidot.ui.Antibiotics.AntibioticsViewModel
-import com.capstone.antidot.ui.Antibiotics.DetailAntibiotics.DetailActivity
 import com.capstone.antidot.ui.Antibiotics.ViewModelFactory
 import kotlinx.coroutines.launch
 
@@ -25,7 +21,7 @@ class AddReminderActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddReminderBinding
     private lateinit var antibioticsViewModel: AntibioticsViewModel
-    private lateinit var adapter: ReminderAdapter
+    private lateinit var adapter: AddReminderAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +39,7 @@ class AddReminderActivity : AppCompatActivity() {
         )[AntibioticsViewModel::class.java]
 
         // Setup RecyclerView
-        adapter = ReminderAdapter { selectedEvent ->
+        adapter = AddReminderAdapter { selectedEvent ->
             if (selectedEvent.antibioticID != 0) {
                 val intent = Intent(this, AddReminderByDatabaseActivity::class.java)
                 intent.putExtra("EVENT_ID", selectedEvent.antibioticID.toString())
@@ -74,17 +70,37 @@ class AddReminderActivity : AppCompatActivity() {
 
         // Hubungkan SearchView dengan Adapter
         val searchView: SearchView = binding.searchView
+        val namaObatTextView: TextView = binding.namaObat
+
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                query?.let {
+                    namaObatTextView.text = it
+                }
                 adapter.filter(query)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                newText?.let {
+                    namaObatTextView.text = "\"$it\" Add Obat"
+                }
                 adapter.filter(newText)
                 return true
             }
         })
+
+        // Tombol untuk menuju AddReminderByUserActivity
+        binding.btnAddUnknownAntibiotic.setOnClickListener {
+            val namaObat = binding.searchView.query.toString()
+            if (namaObat.isNotEmpty()) {
+                val intent = Intent(this, AddReminderByUserActivity::class.java)
+                intent.putExtra("NAMA_OBAT", namaObat) // Mengirimkan nama obat
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Nama obat tidak boleh kosong", Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // Ambil data dari ViewModel
         lifecycleScope.launch {
