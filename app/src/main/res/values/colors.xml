@@ -8,4 +8,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <!-- Primary Color -->
+    <color name="colorPrimary">#5A74FB</color>
+
+    <!-- Primary Variant Color -->
+    <color name="colorPrimaryVariant">#3D58A3</color> <!-- Slightly darker variant for the primary color -->
+
+    <!-- On Primary Color (usually text color on primary color) -->
+    <color name="colorOnPrimary">#FFFFFF</color>
+
+    <!-- Secondary Color -->
+    <color name="colorSecondary">#FF4081</color> <!-- Example secondary color (can be changed) -->
+
+    <!-- Background Color for Splash Screen -->
+    <color name="splash_background">#F7F7F7</color>
 </resources>
