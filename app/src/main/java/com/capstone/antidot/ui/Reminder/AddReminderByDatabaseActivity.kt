@@ -26,6 +26,7 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import com.capstone.antidot.api.RetrofitClient
 import com.capstone.antidot.api.models.ReminderRequest
+import com.capstone.antidot.ui.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -211,6 +212,8 @@ class AddReminderByDatabaseActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (response.status == "success") {
                         Toast.makeText(this@AddReminderByDatabaseActivity, response.message, Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@AddReminderByDatabaseActivity, MainActivity::class.java)
+                        startActivity(intent)
                         finish()
                     } else {
                         Toast.makeText(this@AddReminderByDatabaseActivity, "Gagal menyimpan pengingat", Toast.LENGTH_SHORT).show()

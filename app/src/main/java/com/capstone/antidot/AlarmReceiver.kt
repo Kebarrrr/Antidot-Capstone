@@ -50,7 +50,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context, channelId)
             .setContentTitle("Time to Take Your Medication!")
             .setContentText("It's time for your $medicationName at $time.")
-            .setSmallIcon(R.drawable.riwayatobat)
+            .setSmallIcon(R.drawable.antidot)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -59,7 +59,5 @@ class AlarmReceiver : BroadcastReceiver() {
         val notificationId = medicationName.hashCode()
         notificationManager.notify(notificationId, notification)
 
-        val ringtone = RingtoneManager.getRingtone(context, Uri.parse("android.resource://${context.packageName}/raw/notification_sound"))
-        ringtone.play()
     }
 }
