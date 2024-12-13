@@ -91,3 +91,14 @@ Health Innovation: Empowering Vulnerable Communities for Health and Well-being
 <p>
 Our project is an application development that aims to provide a platform based on the implementation of machine learning for predictive diagnostics to combat the growing issue of antibiotic resistance in Indonesia. This is an important issue marked by the launch of Stranas AMR for Health Sector 2025-2029 by the Ministry of Health in Indonesia. Antibiotic resistance has escalated due to overuse of antibiotics and misdiagnosis of a disease. This trend leads to Antimicrobial Resistance (AMR), where pathogens adapt to survive treatment and potentially cause medical complications. This problem is exacerbated by the lack of an early warning system to predict antibiotic resistance trends in patients as a preventive measure. Our app offers a predictive diagnostic solution to predict the disease and its cause based on the symptoms experienced. The prediction result will be the core reference in providing recommendations for the appropriate use of antibiotics based on the classification of symptoms and diseases experienced. Our core research question is how predictive analytics can affect antibiotic prescribing and recommendations. By leveraging machine learning, we aim to empower healthcare providers and users through a platform that identifies and mitigates antibiotic resistance early, as a transformative impact on Indonesian public health.
 </p>
+<be>
+
+## **Download APP**
+
+[**Access Our Capstone Project**](https://drive.google.com/drive/folders/1rGFXLHu5JQC7bkRrhwDT2uAtaWu42DV5?usp=sharing)
+
+<p>
+Health Innovation: Empowering Vulnerable Communities for Health and Well-being
+</p>
+
+<br>
