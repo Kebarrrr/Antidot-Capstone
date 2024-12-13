@@ -95,10 +95,10 @@ Our project is an application development that aims to provide a platform based 
 
 ## **Download APP**
 
-[**Access Our Capstone Project**](https://drive.google.com/drive/folders/1rGFXLHu5JQC7bkRrhwDT2uAtaWu42DV5?usp=sharing)
+[**Download Our App**](https://drive.google.com/drive/folders/1rGFXLHu5JQC7bkRrhwDT2uAtaWu42DV5?usp=sharing)
 
 <p>
-Health Innovation: Empowering Vulnerable Communities for Health and Well-being
+**Health Innovation: Empowering Vulnerable Communities for Health and Well-being** Download our app today and join us in improving access to health solutions for all. Stay informed, stay healthy, and make a difference in your community!
 </p>
 
 <br>
